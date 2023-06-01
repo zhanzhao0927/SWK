@@ -4,20 +4,77 @@
   "description": "SWK",
   "version": "0.0.1",
   "engines": {
-    "vscode": "^1.78.0"
+    "vscode": "^1.73.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
-  "main": "./dist/extension.ts",
+  "activationEvents": [
+    "onCommand:SWKhelloWorld"
+  ],
+  "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "SWK.helloWorld",
-        "title": "Hello World"
+        "command": "generateImageCode",
+        "title": "生成代码"
+      },
+      {
+        "command": "selectImageToUpload",
+        "title": "选取图片"
+      },
+      {
+        "command": "batchImageUpload",
+        "title": "批量图片"
       }
-    ]
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "generateImageCode"
+        },
+        {
+          "command": "selectImageToUpload"
+        },
+        {
+          "command": "batchImageUpload"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "generateImageCode",
+        "key": "ctrl+g",
+        "mac": "cmd+g"
+      },
+      {
+        "command": "selectImageToUpload",
+        "key": "ctrl+i",
+        "mac": "cmd+i"
+      }
+    ],
+    "configuration":{
+        "title": "SWK",
+        "properties": {
+            "SWK.withProtocol": {
+                "type":"boolean",
+                "description": "生成代码中的图片链接是否携带协议",
+                "default": false
+            },
+            "SWK.template": {
+                "type":"string",
+                "description": "代码模板",
+                "editPresentation": "multilineText",
+                "default":".size({width}px,{height}px);\n.po-absolute;\ntop:0;\nleft:0;\nbackground:url('{url}') no-repeat center / {width}px {height}px;"
+            },
+            "SWK.picTransRatio":{
+                "type":"number",
+                "description": "图片宽高转为代码比率，例如上传三倍图，需生成二倍图尺寸比率为0.66666",
+                "default": 1
+            }
+        }
+    }
+    
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
@@ -45,5 +102,11 @@
     "webpack": "^5.81.0",
     "webpack-cli": "^5.0.2",
     "@vscode/test-electron": "^2.3.0"
+  },
+  "dependencies": {
+    "axios": "^1.4.0",
+    "copy-paste": "^1.5.3",
+    "form-data": "^4.0.0",
+    "jimp": "^0.22.8"
   }
 }
