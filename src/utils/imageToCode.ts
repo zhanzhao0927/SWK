@@ -2,7 +2,7 @@
  * @Description: 图片生成代码&写入
  * @Author: gaozhanzhao
  * @Date: 2023-06-01 16:12:15
- * @LastEditTime: 2023-06-01 20:08:20
+ * @LastEditTime: 2023-06-02 14:28:08
  * @LastEditors: gaozhanzhao
  */
 import * as vscode from "vscode";
@@ -64,8 +64,17 @@ async function imageToCode(
 		.replace(/\{width}/gi, width)
 		.replace(/\{height}/gi, height)
         .replace(/\{url}/gi, url);
-
-
+    //写入
+    const editor = vscode.window.activeTextEditor,
+        editorPost = context?.globalState?.get("") ?? "";
+    
+    editor?.edit((editorBuilder : any)=>{
+        editorBuilder.insert(
+            editorPost ? JSON.parse(editorPost as string) : editor.selection.active,
+            insertTemplate
+        );
+    });
+    vscode.window.showInformationMessage("代码生成成功");
 }
 
 export default imageToCode;
